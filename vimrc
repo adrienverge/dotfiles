@@ -19,6 +19,7 @@ Plugin 'bling/vim-airline'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'scrooloose/nerdtree'
 Plugin 'klen/python-mode'
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 filetype plugin indent on
