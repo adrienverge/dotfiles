@@ -171,6 +171,6 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 " python-mode
 " -----------
 
-"let g:pymode_rope = 1
+let g:pymode_rope_goto_definition_cmd = 'e'
 
 " vi: ts=2 sw=2
