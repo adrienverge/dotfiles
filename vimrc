@@ -93,6 +93,8 @@ map <Tab><Tab>9      :b 9<CR>
 " Possible to leave modified buffers
 set hidden
 
+let mapleader = "#"
+
 " Conf: plugins
 " =============
 
