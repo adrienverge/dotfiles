@@ -99,7 +99,7 @@ set hidden
 " -----------
 
 " font installation :
-" https://powerline.readthedocs.org/en/latest/installation/linux.html#font-installation
+" https://powerline.readthedocs.org/en/latest/installation/linux.html#fonts-installation
 
 set laststatus=2
 let g:airline_powerline_fonts = 1
