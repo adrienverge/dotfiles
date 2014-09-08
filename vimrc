@@ -175,5 +175,6 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 let g:pymode_rope_goto_definition_cmd = 'e'
 let g:pymode_rope_lookup_project = 1
+set completeopt=menu " Disable auto documentation in a new window
 
 " vi: ts=2 sw=2
