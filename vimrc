@@ -154,6 +154,8 @@ endif
 
 map <Tab>w <Plug>(easymotion-bd-w)
 map <Tab>W <Plug>(easymotion-bd-W)
+map <Tab>b <Plug>(easymotion-bd-w)
+map <Tab>B <Plug>(easymotion-bd-W)
 map <Tab>e <Plug>(easymotion-bd-e)
 map <Tab>E <Plug>(easymotion-bd-E)
 map <Tab>f <Plug>(easymotion-bd-f)
