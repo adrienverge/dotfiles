@@ -51,15 +51,13 @@ if has("autocmd")
   " Replace cursor at same position upon next editing
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
   \ | exe "normal! g'\"" | endif
-  " Special indenting for Python
-  au BufNewFile,BufRead *.py setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
-  " C style
+  " Special indentings
+  "au BufNewFile,BufRead *.py setf python
   au BufNewFile,BufRead *.c,*.h,*.cpp setlocal cindent
-  " tex, HTML
+  au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   au FileType tex setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
   au FileType html setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
-  "au BufNewFile,BufRead *.tex setlocal tabstop=2 softtabstop=2 shiftwidth=2
+  au FileType yaml setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
   " Auto-correcting .tex files
   "augroup filetypedetect
   "au BufNewFile,BufRead *.tex setlocal spell spelllang=fr
