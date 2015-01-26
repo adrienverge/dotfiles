@@ -54,7 +54,7 @@ if has("autocmd")
   " Special indentings
   "au BufNewFile,BufRead *.py setf python
   "au BufNewFile,BufRead *.c,*.h,*.cpp setf c
-  au FileType c setlocal cindent noexpandtab
+  au FileType c setlocal cindent noexpandtab foldmethod=syntax colorcolumn=80
   au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   au FileType tex,html,yaml
   \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
