@@ -56,7 +56,7 @@ if has("autocmd")
   "au BufNewFile,BufRead *.c,*.h,*.cpp setf c
   au FileType c setlocal cindent noexpandtab foldmethod=syntax colorcolumn=80
   au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType tex,html,yaml
+  au FileType tex,html,yaml,sh
   \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
   " Auto-correcting .tex files
   "augroup filetypedetect
