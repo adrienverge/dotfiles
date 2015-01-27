@@ -53,7 +53,7 @@ if has("autocmd")
   \ | exe "normal! g'\"" | endif
   " Special indentings
   "au BufNewFile,BufRead *.py setf python
-  "au BufNewFile,BufRead *.c,*.h,*.cpp setf c
+  au BufNewFile,BufRead *.h setlocal filetype=c
   au FileType c setlocal cindent noexpandtab foldmethod=syntax colorcolumn=80
   au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   au FileType tex,html,yaml,sh
