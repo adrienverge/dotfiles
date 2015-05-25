@@ -79,6 +79,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+unsetopt share_history
+
 # Vi mode
 bindkey -v
 bindkey '^r' history-incremental-search-backward
