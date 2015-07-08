@@ -18,6 +18,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'bling/vim-airline'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'scrooloose/nerdtree'
+Plugin 'vim-scripts/autoload_cscope.vim'
 Plugin 'klen/python-mode'
 Plugin 'tpope/vim-fugitive'
 
@@ -119,32 +120,10 @@ map <F4> :NERDTreeToggle<CR>
 " Cscope
 " ------
 
-function s:finduppperdir(file)
-  let prefix = ".."
-  let timeout = 10
-  while !filereadable(prefix . "/" . a:file) && timeout > 0
-    let prefix = "../" . prefix
-    let timeout = timeout - 1
-  endwhile
-  return prefix
-endfunction
-
 if has("cscope")
-  set nocscopeverbose
-  " TODO: Use `cscope show` to know if connection exists
-  if filereadable("cscope.out")
-    cscope add cscope.out
-  else
-    let $CSCOPE_DIR = s:finduppperdir("cscope.out")
-    let $CSCOPE_DB = $CSCOPE_DIR . "/cscope.out"
-    if filereadable($CSCOPE_DB)
-      cscope add $CSCOPE_DB $CSCOPE_DIR
-    endif
-  endif
-  "nnoremap <C-_> :tab cs f g <C-R>=expand("<cword>")<CR><CR>
-  "nnoremap <C-_><C-_> :tab cs f s <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-_>      :cs find g <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-_><C-_> :cs find s <C-R>=expand("<cword>")<CR><CR>
+  set cscopetag cscopeverbose
+  nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 endif
 
 " EasyMotion
