@@ -21,6 +21,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/autoload_cscope.vim'
 Plugin 'klen/python-mode'
 Plugin 'tpope/vim-fugitive'
+Plugin 'scrooloose/syntastic'
 
 call vundle#end()
 filetype plugin indent on
@@ -112,6 +113,8 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
+let g:airline#extensions#syntastic#enabled = 1
+
 " The NERD tree
 " -------------
 
@@ -155,5 +158,11 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 let g:pymode_rope_goto_definition_cmd = 'e'
 let g:pymode_rope_lookup_project = 1
 set completeopt=menu " Disable auto documentation in a new window
+
+" syntastic
+" ---------
+
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exec = 'node_modules/.bin/eslint'
 
 " vi: ts=2 sw=2
