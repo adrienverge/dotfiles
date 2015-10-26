@@ -165,5 +165,7 @@ set completeopt=menu " Disable auto documentation in a new window
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exec = 'node_modules/.bin/eslint'
 let g:syntastic_check_on_wq = 0
+hi SpellBad ctermbg=052
+hi SpellCap ctermbg=058
 
 " vi: ts=2 sw=2
