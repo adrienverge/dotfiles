@@ -41,7 +41,10 @@ set smartcase
 set shiftwidth=8
 set softtabstop=8
 set tabstop=8
-"set textwidth=80
+
+" Text width
+set textwidth=80
+highlight ColorColumn ctermbg=233
 
 " Syntax
 syntax on
