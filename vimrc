@@ -44,6 +44,7 @@ set tabstop=8
 
 " Text width
 set textwidth=80
+set colorcolumn=80
 highlight ColorColumn ctermbg=233
 
 " Syntax
@@ -59,12 +60,12 @@ if has("autocmd")
   " Special indentings
   "au BufNewFile,BufRead *.py setf python
   au BufNewFile,BufRead *.h setlocal filetype=c
-  au FileType c setlocal cindent noexpandtab foldmethod=syntax colorcolumn=80
+  au FileType c setlocal cindent noexpandtab foldmethod=syntax
   au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   au FileType tex,html,yaml,sh
   \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
   au FileType javascript
-  \ setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4 colorcolumn=80
+  \ setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   " Auto-correcting .tex files
   "augroup filetypedetect
   "au BufNewFile,BufRead *.tex setlocal spell spelllang=fr
