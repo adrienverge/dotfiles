@@ -21,7 +21,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/autoload_cscope.vim'
 Plugin 'klen/python-mode'
 Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/syntastic'
+Plugin 'benekastah/neomake'
 Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
@@ -120,8 +120,6 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-let g:airline#extensions#syntastic#enabled = 1
-
 " The NERD tree
 " -------------
 
@@ -166,13 +164,18 @@ let g:pymode_rope_goto_definition_cmd = 'e'
 let g:pymode_rope_lookup_project = 1
 set completeopt=menu " Disable auto documentation in a new window
 
-" syntastic
-" ---------
+" Neomake (previously syntastic)
+" ------------------------------
 
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exec = 'node_modules/.bin/eslint'
-let g:syntastic_check_on_wq = 0
-hi SpellBad ctermbg=052
-hi SpellCap ctermbg=058
+autocmd BufWritePost * Neomake
+let g:neomake_javascript_enabled_makers= ['eslint']
+"let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+let g:neomake_javascript_eslint_exe = substitute(
+  \ system('PATH=$(npm bin):$PATH && which eslint'),
+  \ '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+hi NeomakeError ctermbg=black ctermfg=1
+hi NeomakeWarning ctermbg=black ctermfg=11
+let g:neomake_error_sign = { 'texthl': 'NeomakeError' }
+let g:neomake_warning_sign = { 'texthl': 'NeomakeWarning' }
 
 " vi: ts=2 sw=2
