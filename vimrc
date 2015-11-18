@@ -22,6 +22,7 @@ Plugin 'vim-scripts/autoload_cscope.vim'
 Plugin 'klen/python-mode'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/syntastic'
+Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 filetype plugin indent on
