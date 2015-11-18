@@ -1,8 +1,8 @@
 " Bootstrapping
 " =============
 "
-" mkdir -p ~/.vim/bundle
-" git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+" mkdir -p ~/.config/nvim/bundle
+" git clone https://github.com/gmarik/Vundle.vim.git ~/.config/nvim/bundle/Vundle.vim
 "
 " :PluginList
 " :PluginInstall
@@ -10,7 +10,7 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.config/nvim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
@@ -53,6 +53,8 @@ syntax on
 
 " No auto indenting during copy-paste, but no auto-formatting
 "set paste
+
+set clipboard+=unnamedplus
 
 if has("autocmd")
   " Replace cursor at same position upon next editing
