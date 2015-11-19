@@ -43,13 +43,14 @@ set shiftwidth=8
 set softtabstop=8
 set tabstop=8
 
-" Text width
-set textwidth=80
-set colorcolumn=80
-highlight ColorColumn ctermbg=233
-
 " Syntax
 syntax on
+
+" Text width
+autocmd BufReadPost *
+	\ if &l:textwidth == 0 | setlocal textwidth=80 | endif
+  \ | execute "setlocal colorcolumn=" . &l:textwidth
+highlight ColorColumn ctermbg=233
 
 " No auto indenting during copy-paste, but no auto-formatting
 "set paste
@@ -73,7 +74,6 @@ if has("autocmd")
   "augroup filetypedetect
   "au BufNewFile,BufRead *.tex setlocal spell spelllang=fr
   "augroup END
-  au FileType gitcommit setlocal textwidth=72 colorcolumn=72
 endif
 
 " Tab-completing for opening files
