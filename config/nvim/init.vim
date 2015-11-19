@@ -73,6 +73,7 @@ if has("autocmd")
   "augroup filetypedetect
   "au BufNewFile,BufRead *.tex setlocal spell spelllang=fr
   "augroup END
+  au FileType gitcommit setlocal textwidth=72 colorcolumn=72
 endif
 
 " Tab-completing for opening files
