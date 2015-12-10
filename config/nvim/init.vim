@@ -68,7 +68,7 @@ if has("autocmd")
   au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   au FileType tex,html,yaml,sh
   \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
-  au FileType javascript
+  au FileType javascript,json
   \ setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
   " Auto-correcting .tex files
   "augroup filetypedetect
