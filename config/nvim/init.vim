@@ -49,7 +49,7 @@ syntax on
 set mouse=
 
 " Text width
-autocmd BufReadPost *
+autocmd BufReadPost,BufNewFile *
 	\ if &l:textwidth == 0 | setlocal textwidth=80 | endif
   \ | execute "setlocal colorcolumn=" . &l:textwidth
 highlight ColorColumn ctermbg=233
