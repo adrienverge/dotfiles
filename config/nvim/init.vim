@@ -46,6 +46,8 @@ set tabstop=8
 " Syntax
 syntax on
 
+set mouse=
+
 " Text width
 autocmd BufReadPost *
 	\ if &l:textwidth == 0 | setlocal textwidth=80 | endif
