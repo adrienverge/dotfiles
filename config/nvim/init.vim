@@ -172,8 +172,8 @@ set completeopt=menu " Disable auto documentation in a new window
 " ------------------------------
 
 autocmd BufWritePost * Neomake
-hi NeomakeError ctermbg=black ctermfg=1
-hi NeomakeWarning ctermbg=black ctermfg=11
+hi NeomakeError ctermbg=none ctermfg=1
+hi NeomakeWarning ctermbg=none ctermfg=11
 let g:neomake_error_sign = { 'texthl': 'NeomakeError' }
 let g:neomake_warning_sign = { 'texthl': 'NeomakeWarning' }
 
