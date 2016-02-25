@@ -23,6 +23,7 @@ Plugin 'klen/python-mode'
 Plugin 'tpope/vim-fugitive'
 Plugin 'benekastah/neomake'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'rust-lang/rust.vim'
 
 call vundle#end()
 filetype plugin indent on
