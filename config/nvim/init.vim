@@ -24,6 +24,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'benekastah/neomake'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'rust-lang/rust.vim'
+Plugin 'vivien/vim-linux-coding-style'
 
 call vundle#end()
 filetype plugin indent on
