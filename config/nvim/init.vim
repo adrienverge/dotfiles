@@ -52,7 +52,7 @@ set mouse=
 
 " Text width
 autocmd BufReadPost,BufNewFile *
-	\ if &l:textwidth == 0 | setlocal textwidth=80 | endif
+  \ if &l:textwidth == 0 | setlocal textwidth=80 | endif
   \ | execute "setlocal colorcolumn=" . &l:textwidth
 highlight ColorColumn ctermbg=233
 
@@ -78,6 +78,7 @@ if has("autocmd")
   "augroup filetypedetect
   "au BufNewFile,BufRead *.tex setlocal spell spelllang=fr
   "augroup END
+  au BufNewFile,BufRead *.plt,*.gnuplot set filetype=gnuplot
 endif
 
 " Tab-completing for opening files
