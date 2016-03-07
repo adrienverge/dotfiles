@@ -86,7 +86,8 @@ bindkey -v
 bindkey '^r' history-incremental-search-backward
 
 alias top=htop
-alias vi=vim
+alias vi=nvim
+alias vim=nvim
 alias go=gnome-open
 
 export EDITOR=vim
