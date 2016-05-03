@@ -26,6 +26,7 @@ Plugin 'benekastah/neomake'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'rust-lang/rust.vim'
 Plugin 'vivien/vim-linux-coding-style'
+Plugin 'leafgarland/typescript-vim'
 
 call vundle#end()
 filetype plugin indent on
