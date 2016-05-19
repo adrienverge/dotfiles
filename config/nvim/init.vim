@@ -49,6 +49,8 @@ set tabstop=8
 
 " Syntax
 syntax on
+highlight Search ctermbg=226
+highlight Todo ctermbg=226
 
 set mouse=
 
