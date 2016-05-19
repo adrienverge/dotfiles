@@ -58,7 +58,7 @@ set mouse=
 autocmd BufReadPost,BufNewFile *
   \ if &l:textwidth == 0 | setlocal textwidth=80 | endif
   \ | execute "setlocal colorcolumn=" . &l:textwidth
-highlight ColorColumn ctermbg=233
+highlight ColorColumn ctermbg=230
 
 " No auto indenting during copy-paste, but no auto-formatting
 "set paste
