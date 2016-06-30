@@ -85,9 +85,9 @@ if has("autocmd")
   au BufNewFile,BufRead *.plt,*.gnuplot set filetype=gnuplot
 endif
 
-" Tab-completing for opening files
-"set wildmode=longest,list,full
-"set wildmenu
+" Tab-completion for completing command (e.g. opening files)
+set wildmenu
+set wildmode=longest:full,full
 
 " Buffer shortcuts
 " <Tab><Tab><Tab>  shows buffers
