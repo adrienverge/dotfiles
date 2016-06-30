@@ -74,7 +74,7 @@ if has("autocmd")
   au BufNewFile,BufRead *.h setlocal filetype=c
   au FileType c setlocal cindent noexpandtab foldmethod=syntax
   au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType tex,html,yaml,sh,zsh
+  au FileType tex,html,css,yaml,sh,zsh
   \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
   au FileType javascript,json,typescript
   \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
