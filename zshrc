@@ -85,6 +85,7 @@ unsetopt share_history
 bindkey -v
 bindkey '^r' history-incremental-search-backward
 
+alias sudo='sudo '  # http://askubuntu.com/a/22043
 alias top=htop
 alias vi=nvim
 alias vim=nvim
