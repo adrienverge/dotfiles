@@ -27,6 +27,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'rust-lang/rust.vim'
 Plugin 'vivien/vim-linux-coding-style'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'digitaltoad/vim-pug'
 
 call vundle#end()
 filetype plugin indent on
