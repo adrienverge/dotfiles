@@ -84,6 +84,7 @@ if has("autocmd")
   "au BufNewFile,BufRead *.tex setlocal spell spelllang=fr
   "augroup END
   au BufNewFile,BufRead *.plt,*.gnuplot set filetype=gnuplot
+  au BufNewFile,BufRead */{group,host}_vars/* set filetype=yaml
 endif
 
 " Tab-completion for completing command (e.g. opening files)
