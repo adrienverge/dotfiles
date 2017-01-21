@@ -120,8 +120,7 @@ set hidden
 " vim-airline
 " -----------
 
-" font installation :
-" https://powerline.readthedocs.org/en/latest/installation/linux.html#fonts-installation
+" font installation : `sudo dnf install powerline-fonts`, then restart Wayland
 
 let g:airline_theme = 'powerlineish'
 
