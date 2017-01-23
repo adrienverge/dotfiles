@@ -91,7 +91,7 @@ alias vi=nvim
 alias vim=nvim
 alias go=gnome-open
 
-export EDITOR=vim
+export EDITOR=nvim
 export LESS=-FRSX
 
 alias gl="git log --graph --abbrev-commit --decorate --date=short --format=format:'%C(bold blue)%h%C(reset) %C(bold green)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'"
