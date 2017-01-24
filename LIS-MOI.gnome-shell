@@ -1,0 +1,10 @@
+Ajouter une touche Super
+------------------------
+
+Créer un raccourci clavier de cette touche vers la commande :
+
+   gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell
+              --method org.gnome.Shell.Eval "Main.overview.toggle()"
+
+Trouvé grâce à
+http://blog.fpmurphy.com/2012/01/changing-the-activities-button-in-gnome-shell-3-2.html
