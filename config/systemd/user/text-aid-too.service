@@ -1,0 +1,10 @@
+[Unit]
+Description=Text-Aid-Too
+
+[Service]
+ExecStart=/usr/bin/text-aid-too
+Environment="TEXT_AID_TOO_SECRET=44vz7tg8LzrTDWq6nFTn"
+Environment="TEXT_AID_TOO_EDITOR=urxvt -g 90 -fn 'xft:Bitstream Vera Sans Mono:pixelsize=15' -e nvim"
+
+[Install]
+WantedBy=default.target
