@@ -4,7 +4,9 @@ Description=Text-Aid-Too
 [Service]
 ExecStart=/usr/bin/text-aid-too
 Environment="TEXT_AID_TOO_SECRET=44vz7tg8LzrTDWq6nFTn"
-Environment="TEXT_AID_TOO_EDITOR=urxvt -g 90 -fn 'xft:Bitstream Vera Sans Mono:pixelsize=15' -e nvim"
+Environment="TEXT_AID_TOO_EDITOR=bash -c 'pantheon-terminal -e \"nvim $@\"' --"
+# gsettings set org.pantheon.terminal.saved-state window-width 1000
+# gsettings set org.pantheon.terminal.settings tab-bar-behavior 'Hide When Single Tab'
 
 [Install]
 WantedBy=default.target
