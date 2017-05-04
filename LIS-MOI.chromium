@@ -1,0 +1,16 @@
+Chromium
+========
+
+H264, MP3, etc.
+---------------
+
+wget -O /tmp/chromium-ffmpeg.deb \
+  http://fr.archive.ubuntu.com/ubuntu/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_58.0.3029.81-0ubuntu0.16.10.1345_amd64.deb
+
+Extract libffmpeg.so.
+
+sudo cp /usr/lib64/chromium-browser/libffmpeg.so \
+        /usr/lib64/chromium-browser/libffmpeg.so.bak
+sudo cp /tmp/libffmpeg.so /usr/lib64/chromium-browser/libffmpeg.so
+
+Restart Chromium.
