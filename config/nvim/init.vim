@@ -64,7 +64,7 @@ highlight ColorColumn ctermbg=230
 " No auto indenting during copy-paste, but no auto-formatting
 "set paste
 
-set clipboard+=unnamedplus
+set clipboard=unnamed,unnamedplus
 
 if has("autocmd")
   " Replace cursor at same position upon next editing
