@@ -174,8 +174,9 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 let g:pymode_python = 'python3'
 " For it to work: pip3 install --user neovim
 
+let g:pymode_rope = 1
+let g:pymode_rope_lookup_project = 0
 let g:pymode_rope_goto_definition_cmd = 'e'
-let g:pymode_rope_lookup_project = 1
 let g:pymode_lint_cwindow = 0
 set completeopt=menu " Disable auto documentation in a new window
 
