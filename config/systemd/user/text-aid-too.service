@@ -7,6 +7,7 @@ Environment="TEXT_AID_TOO_SECRET=44vz7tg8LzrTDWq6nFTn"
 Environment="TEXT_AID_TOO_EDITOR=bash -c 'pantheon-terminal -e \"nvim $@\"' --"
 # gsettings set org.pantheon.terminal.saved-state window-width 1000
 # gsettings set org.pantheon.terminal.settings tab-bar-behavior 'Hide When Single Tab'
+# gsettings set org.pantheon.terminal.settings natural-copy-paste false
 
 [Install]
 WantedBy=default.target
