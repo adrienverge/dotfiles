@@ -180,6 +180,8 @@ let g:pymode_rope_goto_definition_cmd = 'e'
 let g:pymode_lint_cwindow = 0
 set completeopt=menu " Disable auto documentation in a new window
 
+let g:pymode_lint = 0
+
 " Neomake (previously syntastic)
 " ------------------------------
 
