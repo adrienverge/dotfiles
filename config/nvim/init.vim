@@ -42,6 +42,7 @@ set number
 " Search
 set hlsearch
 set smartcase
+set scrolloff=5
 
 " Tabs
 set shiftwidth=8
