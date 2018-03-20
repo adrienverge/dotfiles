@@ -6,6 +6,10 @@
 # Most values can be set within GIMP by changing some options in the
 # Preferences dialog.
 
+# Pratique pour ré-écrire ce fichier :
+# Édition > Préférences > Options des outils > Enregistrer maintenant
+
 (default-snap-to-canvas yes)
+(default-brush "000-1-Round")
 
 # end of gimprc
