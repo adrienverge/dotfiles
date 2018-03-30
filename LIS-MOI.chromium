@@ -1,7 +1,25 @@
 Chromium
 ========
 
-H264, MP3, etc.
+Enable H264, MP3, etc. decoding.
+
+Update: 2018-03-30
+------------------
+
+Enable UnitedRPMs repo:
+https://github.com/UnitedRPMs/WIKI/wiki/How-to-enable-the-UnitedRPMs-repository-in-your-system
+
+sudo dnf remove chromium
+sudo dnf install chromium-freeworld
+
+Update: 2017-12
+---------------
+
+Enable RPM Fusion repo.
+
+sudo dnf install chromium-libs-media-freeworld
+
+Update: 2017-05
 ---------------
 
 wget -O /tmp/chromium-ffmpeg.deb \
