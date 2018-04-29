@@ -20,7 +20,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/autoload_cscope.vim'
-Plugin 'klen/python-mode'
+Plugin 'python-mode/python-mode'
 Plugin 'tpope/vim-fugitive'
 Plugin 'benekastah/neomake'
 Plugin 'airblade/vim-gitgutter'
@@ -28,6 +28,8 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'vivien/vim-linux-coding-style'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'digitaltoad/vim-pug'
+Plugin 'Konfekt/FastFold'
+Plugin 'tmhedberg/SimpylFold'
 
 call vundle#end()
 filetype plugin indent on
@@ -182,6 +184,11 @@ let g:pymode_lint_cwindow = 0
 set completeopt=menu " Disable auto documentation in a new window
 
 let g:pymode_lint = 0
+
+" Use 'tmhedberg/SimpylFold' which is much better for folding, but keep
+" python-mode folding text
+let g:pymode_folding = 0
+au FileType python setlocal foldtext=pymode#folding#text()
 
 " Neomake (previously syntastic)
 " ------------------------------
