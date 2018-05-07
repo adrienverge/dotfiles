@@ -8,3 +8,24 @@ Créer un raccourci clavier de cette touche vers la commande :
 
 Trouvé grâce à
 http://blog.fpmurphy.com/2012/01/changing-the-activities-button-in-gnome-shell-3-2.html
+
+Afficher les icônes sur le bureau
+---------------------------------
+
+Depuis Fedora 28 :
+
+  sudo dnf install nemo
+  cat >~/.config/autostart/nemo-autostart-with-gnome.desktop <<EOM
+  [Desktop Entry]
+  Type=Application
+  Name=Nemo
+  Comment=Start Nemo desktop at log in
+  Exec=nemo-desktop
+  OnlyShowIn=GNOME;
+  AutostartCondition=GSettings org.nemo.desktop show-desktop-icons
+  X-GNOME-AutoRestart=true
+  NoDisplay=true
+  EOM
+  gsettings set org.nemo.desktop use-desktop-grid false
+
+https://gitlab.gnome.org/GNOME/nautilus/issues/158#alternative-solution
