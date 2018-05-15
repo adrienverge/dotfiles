@@ -29,3 +29,15 @@ Depuis Fedora 28 :
   gsettings set org.nemo.desktop use-desktop-grid false
 
 https://gitlab.gnome.org/GNOME/nautilus/issues/158#alternative-solution
+
+Récupérer le raccourci Ctrl+Maj+E
+---------------------------------
+
+Depuis Fedora 28 ce raccourci ouvre une fenêtre d'emojis au lieu d'être passé à
+l'application.
+
+$ ibus-setup
+→ Emojis
+→ changer le raccourci
+
+https://ask.fedoraproject.org/en/question/120675/terminator-vs-ctrl-shift-e-gnome-key-how-to-disable-gnome-key-intervention/
