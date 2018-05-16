@@ -1,0 +1,88 @@
+#!/bin/bash
+# Copyright 2017 Adrien Vergé
+# Created on 2017-12-20
+# Updated on 2018-05-16
+
+set -eu
+
+usage() {
+  echo "usage:" >&2
+  echo "  $0 INPUT.PDF OUTPUT.PDF" >&2
+  echo "  $0 INPUT1.JPG INPUT2.PNG ... OUTPUT.PDF" >&2
+  echo "Transforms an input (images or PDF) into a PDF that look scanned." >&2
+}
+
+[ $# -lt 2 ] && { usage; exit 1; }
+
+INPUTS=()
+for f in "${@:1:$#-1}"; do
+  [ -f "$f" ] || { usage; exit 1; }
+  INPUTS=("${INPUTS[@]}" "$f")
+done
+
+OUTPUT="${@: -1}"
+extension="${OUTPUT##*.}"
+[ "${extension,,}" = "pdf" ] || { usage; exit 1; }
+
+TMP="$(mktemp -d fake-scanned-XXXX)"
+
+DPI=200
+W=$((DPI*827/100))  # A4, ex. for 200 DPI: 1654 pixels
+H=$((DPI*1169/100)) # A4, ex. for 200 DPI: 2338 pixels
+
+# If input is a PDF, convert to images
+first_input="${INPUTS[0]}"
+if [ ${#INPUTS[@]} -eq 1 ] && [ "${first_input##*.}" = "pdf" ]; then
+  convert -density $DPI "$first_input" \
+          -resize ${W}x${H} \
+          -alpha remove -background white -colorspace gray \
+          "$TMP/page-%d.jpg"
+# If inputs are images, make them black & white and resize them to W×H
+else
+  i=0
+  for input in "${INPUTS[@]}"; do
+    convert "$input" \
+            -resize ${W}x${H} \
+            -gravity center \
+            -alpha remove -background white -colorspace gray \
+            -extent ${W}x${H} \
+            "$TMP/page-$(printf "%02d" $i).jpg"
+    i=$((i + 1))
+  done
+fi
+
+INPUTS=$(ls $TMP/page-*.jpg)
+
+# Rotate pages and add some noise
+for f in $INPUTS; do
+  # Explanation:
+  # - create a white image with random dots (use random + operators, see
+  #   http://www.imagemagick.org/Usage/canvas/#random)
+  # - multiply it (bumpmap) with a original image
+  # - rotate the image by a random amount
+  # - crop the image to W×H
+  convert -size ${W}x${H} xc: +noise Random \
+          -virtual-pixel tile -blur 0x2 -auto-level \
+          -level 3%,15% \
+          -sharpen 0x1.2 \
+          -channel G -separate \
+          "$f" \
+          -rotate 0.$(echo $RANDOM % 4 + 1 | bc) \
+          -compose bumpmap \
+          -composite \
+          -gravity center -crop ${W}x${H}+0+0 +repage \
+          "$f-step2.jpg"
+done
+
+INPUTS=$(ls $TMP/page-*-step2.jpg)
+
+echo "Creating black and white PDF (A4, $DPI dpi)..."
+convert $INPUTS \
+        -level 60%,80% \
+        -monochrome -compress Group4 \
+        -density ${DPI}x${DPI} -units PixelsPerInch \
+        -resize ${W}x${H} \
+        -repage ${W}x${H} \
+        "$TMP/SCAN0042.PDF"  # to give the PDF metadata a name
+
+mv "$TMP/SCAN0042.PDF" "$OUTPUT"
