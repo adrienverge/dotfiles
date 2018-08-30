@@ -69,26 +69,24 @@ highlight ColorColumn ctermbg=230
 
 set clipboard=unnamedplus
 
-if has("autocmd")
-  " Replace cursor at same position upon next editing
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-  \ | exe "normal! g'\"" | endif
-  " Special indentings
-  "au BufNewFile,BufRead *.py setf python
-  au BufNewFile,BufRead *.h setlocal filetype=c
-  au FileType c setlocal cindent noexpandtab foldmethod=syntax
-  au FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType tex,html,pug,css,yaml,sh,zsh
-  \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
-  au FileType javascript,json,typescript
-  \ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
-  " Auto-correcting .tex files
-  "augroup filetypedetect
-  "au BufNewFile,BufRead *.tex setlocal spell spelllang=fr
-  "augroup END
-  au BufNewFile,BufRead *.plt,*.gnuplot set filetype=gnuplot
-  au BufNewFile,BufRead */{group,host}_vars/* set filetype=yaml
-endif
+" Replace cursor at same position upon next editing
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+\ | exe "normal! g'\"" | endif
+" Special indentings
+"autocmd BufNewFile,BufRead *.py setf python
+autocmd BufNewFile,BufRead *.h setlocal filetype=c
+autocmd FileType c setlocal cindent noexpandtab foldmethod=syntax
+autocmd FileType python setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
+autocmd FileType tex,html,pug,css,yaml,sh,zsh
+\ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType javascript,json,typescript
+\ setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2
+" Auto-correcting .tex files
+"augroup filetypedetect
+"autocmd BufNewFile,BufRead *.tex setlocal spell spelllang=fr
+"augroup END
+autocmd BufNewFile,BufRead *.plt,*.gnuplot set filetype=gnuplot
+autocmd BufNewFile,BufRead */{group,host}_vars/* set filetype=yaml
 
 " Tab-completion for completing command (e.g. opening files)
 set wildmenu
@@ -144,8 +142,9 @@ map <F4> :NERDTreeToggle<CR>
 
 if has("cscope")
   set cscopetag cscopeverbose
-  nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+  "nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+  autocmd FileType c nnoremap <buffer> <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+  autocmd FileType c nnoremap <buffer> <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 endif
 
 " EasyMotion
@@ -188,7 +187,7 @@ let g:pymode_lint = 0
 " Use 'tmhedberg/SimpylFold' which is much better for folding, but keep
 " python-mode folding text
 let g:pymode_folding = 0
-au FileType python setlocal foldtext=pymode#folding#text()
+autocmd FileType python setlocal foldtext=pymode#folding#text()
 
 " Neomake (previously syntastic)
 " ------------------------------
