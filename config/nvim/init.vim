@@ -27,6 +27,9 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'rust-lang/rust.vim'
 Plugin 'vivien/vim-linux-coding-style'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'mhartington/nvim-typescript'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'Shougo/denite.nvim'
 Plugin 'digitaltoad/vim-pug'
 Plugin 'Konfekt/FastFold'
 Plugin 'tmhedberg/SimpylFold'
@@ -142,7 +145,6 @@ map <F4> :NERDTreeToggle<CR>
 
 if has("cscope")
   set cscopetag cscopeverbose
-  "nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
   autocmd FileType c nnoremap <buffer> <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
   autocmd FileType c nnoremap <buffer> <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 endif
@@ -205,5 +207,12 @@ elseif executable('eslint')
   let g:neomake_javascript_eslint_exe = 'eslint'
   let g:neomake_javascript_enabled_makers = ['eslint']
 endif
+
+" nvim-typescript
+" ---------------
+" (needs ./install.sh and :UpdateRemotePlugins)
+
+let g:deoplete#enable_at_startup = 1
+autocmd FileType typescript nnoremap <buffer> <C-c>g :TSDef<CR>
 
 " vi: ts=2 sw=2
