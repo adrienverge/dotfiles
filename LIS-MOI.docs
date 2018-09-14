@@ -1,0 +1,22 @@
+docs
+====
+
+Nice post: https://oguya.ch/posts/2015-09-01-systemd-mount-partition/
+
+cat >/etc/systemd/system/docs.mount <<EOM
+[Unit]
+Description=Mount /docs
+
+[Mount]
+What=/dev/disk/by-uuid/16f2ceb9-d784-4173-8aa2-92a247f8605b
+Where=/docs
+Type=ext4
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+EOM
+
+sudo systemctl daemon-reload
+sudo systemctl start docs.mount
+sudo systemctl enable docs.mount
