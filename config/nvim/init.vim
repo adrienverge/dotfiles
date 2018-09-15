@@ -210,7 +210,11 @@ endif
 
 " nvim-typescript
 " ---------------
-" (needs ./install.sh and :UpdateRemotePlugins)
+" Needs:
+" pip3 install --user neovim
+" sudo npm install -g neovim
+" cd ~/.vim/bundle/nvim-typescript; ./install.sh
+" :UpdateRemotePlugins
 
 let g:deoplete#enable_at_startup = 1
 autocmd FileType typescript nnoremap <buffer> <C-c>g :TSDef<CR>
