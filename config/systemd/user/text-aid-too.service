@@ -1,3 +1,9 @@
+# sudo npm install -g text-aid-too
+# systemctl --user daemon-reload
+# systemctl --user start text-aid-too
+# systemctl --user enable text-aid-too
+# journalctl --user -u text-aid-too -f
+
 [Unit]
 Description=Text-Aid-Too
 
