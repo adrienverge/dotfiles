@@ -45,7 +45,11 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+  git
+  # Needs git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  zsh-autosuggestions
+)
 
 # User configuration
 
@@ -98,3 +102,5 @@ alias gl="git log --graph --abbrev-commit --decorate --date=short --format=forma
 
 zstyle ':completion:*:files' ignored-patterns '*.egg-info'
 zstyle ':completion:*:cd:*' ignored-patterns '*.egg-info'
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=7'
