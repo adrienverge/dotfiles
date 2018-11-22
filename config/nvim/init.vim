@@ -189,7 +189,8 @@ let g:pymode_lint = 0
 " Use 'tmhedberg/SimpylFold' which is much better for folding, but keep
 " python-mode folding text
 let g:pymode_folding = 0
-autocmd FileType python setlocal foldtext=pymode#folding#text()
+" Change folding labels (but freezes Nvim with some .py files):
+"autocmd FileType python setlocal foldtext=pymode#folding#text()
 
 " Neomake (previously syntastic)
 " ------------------------------
