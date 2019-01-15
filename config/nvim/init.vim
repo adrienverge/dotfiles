@@ -15,6 +15,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'morhetz/gruvbox'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Lokaltog/vim-easymotion'
@@ -39,6 +40,11 @@ filetype plugin indent on
 
 " Conf: general vim
 " ==================
+
+" Coloscheme
+colorscheme gruvbox
+set background=light
+let g:gruvbox_contrast_light = 'hard'
 
 " Display
 set number
@@ -65,7 +71,7 @@ set mouse=
 autocmd BufReadPost,BufNewFile *
   \ if &l:textwidth == 0 | setlocal textwidth=80 | endif
   \ | execute "setlocal colorcolumn=" . &l:textwidth
-highlight ColorColumn ctermbg=230
+highlight ColorColumn ctermbg=15
 
 " No auto indenting during copy-paste, but no auto-formatting
 "set paste
