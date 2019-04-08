@@ -41,3 +41,8 @@ $ ibus-setup
 → changer le raccourci
 
 https://ask.fedoraproject.org/en/question/120675/terminator-vs-ctrl-shift-e-gnome-key-how-to-disable-gnome-key-intervention/
+
+Assigner le sélecteur de caractères Unicode à Ctrl+Maj+I
+--------------------------------------------------------
+
+Réglages du clavier → Raccourcis personnalisés → Ajouter `gnome-characters`.
