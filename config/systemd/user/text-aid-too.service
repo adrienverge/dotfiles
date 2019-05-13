@@ -1,3 +1,4 @@
+# sudo dnf install coffee-script elementary-terminal
 # sudo npm install -g text-aid-too
 # systemctl --user daemon-reload
 # systemctl --user start text-aid-too
