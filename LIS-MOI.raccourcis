@@ -1,0 +1,59 @@
+Récupérer le raccourci Ctrl+Maj+E
+---------------------------------
+
+Depuis Fedora 28 ce raccourci ouvre une fenêtre d'emojis au lieu d'être passé à
+l'application.
+
+$ ibus-setup
+→ Emojis
+→ changer le raccourci
+
+https://ask.fedoraproject.org/en/question/120675/terminator-vs-ctrl-shift-e-gnome-key-how-to-disable-gnome-key-intervention/
+
+Assigner le sélecteur de caractères Unicode à Ctrl+Maj+I
+--------------------------------------------------------
+
+Réglages du clavier → Raccourcis personnalisés → Ajouter `gnome-characters`.
+
+Assigner AltGr + flèches à ← → ↑ ↓
+----------------------------------
+
+  sudo cat >/usr/share/X11/xkb/symbols/adrien <<EOM
+  partial alphanumeric_keys
+  xkb_symbols "unicodearrows" {
+    key <LEFT> { [ Left, Left, U2190, U2190 ] };
+    key <RGHT> { [ Right, Right, U2192, U2192 ] };
+    key <UP> { [ Up, Up, U2191, U2191 ] };
+    key <DOWN> { [ Down, Down, U2193, U2193 ] };
+  };
+  EOM
+
+Éditer /usr/share/X11/xkb/rules/evdev et ajouter dans `! option = symbols` :
+
+  adrien:unicodearrows  =       +adrien(unicodearrows)
+
+Éditer /usr/share/X11/xkb/rules/evdev.lst et ajouter dans `! option` :
+
+  adrien               Customisations d'Adrien
+  adrien:unicodearrows ← → ↑ ↓ avec AltGr + flèches
+
+Éditer /usr/share/X11/xkb/rules/evdev.xml et ajouter dans <optionList> :
+
+  <group allowMultipleSelection="true">
+    <configItem>
+      <name>adrien</name>
+      <description>Customisations d'Adrien</description>
+    </configItem>
+    <option>
+      <configItem>
+        <name>adrien:unicodearrows</name>
+        <description>← → ↑ ↓ avec AltGr + flèches</description>
+      </configItem>
+    </option>
+  </group>
+
+Cela rend l'option disponible dans gnome-tweaks, sous « Clavier & souris »,
+« Options supplémentaires d'agencement ». L'option peut se cocher, ce qui va
+ajouter ou enlever `adrien:unicodearrows` dans la configuration dconf
+`/org/gnome/desktop/input-sources/xkb-options`. Aucun redémarrage ou fermeture
+de session n'est nécessaire.
