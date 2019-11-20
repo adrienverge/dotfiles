@@ -39,12 +39,11 @@ Assigner AltGr + flèches à ← → ↑ ↓
 
   adrien:unicodearrows  =       +adrien(unicodearrows)
 
-Éditer /usr/share/X11/xkb/rules/evdev.lst et ajouter dans `! option` :
+Attention : chaque mise à jour du paquet DNF `xkeyboard-config` réécrase ce
+fichier... il faut donc parfois le remodifier.
 
-  adrien               Customisations d'Adrien
-  adrien:unicodearrows ← → ↑ ↓ avec AltGr + flèches
-
-Éditer /usr/share/X11/xkb/rules/evdev.xml et ajouter dans <optionList> :
+Ensuite, pour pouvoir activer l'option à la main via gnome-tweaks, il faut
+éditer /usr/share/X11/xkb/rules/evdev.xml et ajouter dans <optionList> :
 
   <group allowMultipleSelection="true">
     <configItem>
@@ -58,6 +57,8 @@ Assigner AltGr + flèches à ← → ↑ ↓
       </configItem>
     </option>
   </group>
+
+Note : il ne semble pas nécessaire de toucher /usr/share/X11/xkb/rules/evdev.lst
 
 Cela rend l'option disponible dans gnome-tweaks, sous « Clavier & souris »,
 « Options supplémentaires d'agencement ». L'option peut se cocher, ce qui va
