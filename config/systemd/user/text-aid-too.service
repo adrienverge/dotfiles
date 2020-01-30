@@ -11,7 +11,9 @@ Description=Text-Aid-Too
 [Service]
 ExecStart=/usr/bin/text-aid-too
 Environment="TEXT_AID_TOO_SECRET=44vz7tg8LzrTDWq6nFTn"
-Environment="TEXT_AID_TOO_EDITOR=bash -c 'io.elementary.terminal -e \"nvim $@\"' --"
+# Adrien 2020-01-30, `-w /` is a temp bug fix while waiting for 5.5.1, cf.
+# https://github.com/elementary/terminal/issues/460#issuecomment-573346709
+Environment="TEXT_AID_TOO_EDITOR=bash -c 'io.elementary.terminal -w / -e \"bash -c \\\"sleep .1 && nvim $@\\\"\"' --"
 Environment="DISPLAY=:1"
 # gsettings set io.elementary.terminal.saved-state window-width 1000
 # gsettings set io.elementary.terminal.settings tab-bar-behavior 'Hide When Single Tab'
