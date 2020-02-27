@@ -4,3 +4,6 @@ Manipulation de PDF
 Xournal
 PDF Mod
 pdf-stapler (https://github.com/hellerbarde/stapler)
+
+Combiner 2 pages A5 en une seule page A4 :
+pdfjam --nup 2x1 INPUT-DEUX-PAGES-A5.pdf --outfile OUTPUT-A4.pdf
