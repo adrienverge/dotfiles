@@ -187,6 +187,7 @@ let g:pymode_python = 'python3'
 let g:pymode_rope = 1
 let g:pymode_rope_lookup_project = 0
 let g:pymode_rope_goto_definition_cmd = 'e'
+let g:pymode_rope_complete_on_dot = 0 " github.com/python-mode/python-mode/issues/748
 let g:pymode_lint_cwindow = 0
 set completeopt=menu " Disable auto documentation in a new window
 
