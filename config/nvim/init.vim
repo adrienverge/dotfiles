@@ -208,8 +208,8 @@ hi NeomakeWarning ctermbg=none ctermfg=11
 let g:neomake_error_sign = { 'texthl': 'NeomakeError' }
 let g:neomake_warning_sign = { 'texthl': 'NeomakeWarning' }
 
-if executable('./node_modules/.bin/eslint')
-  let g:neomake_javascript_eslint_exe = './node_modules/.bin/eslint'
+if executable($PWD . '/node_modules/.bin/eslint')
+  let g:neomake_javascript_eslint_exe = $PWD . '/node_modules/.bin/eslint'
   let g:neomake_javascript_enabled_makers = ['eslint']
 elseif executable('eslint')
   let g:neomake_javascript_eslint_exe = 'eslint'
