@@ -78,6 +78,23 @@ highlight ColorColumn ctermbg=15
 
 set clipboard=unnamedplus
 
+" Fix clipboard pasting ^M (\r) characters on Wayland
+" https://github.com/neovim/neovim/issues/10223#issuecomment-521952122
+if exists('$WAYLAND_DISPLAY')
+  let g:clipboard = {
+  \   'name': 'wl-clipboard with ^M trim',
+  \   'copy': {
+  \     '+': 'wl-copy --foreground --type text/plain',
+  \     '*': 'wl-copy --foreground --type text/plain --primary',
+  \    },
+  \   'paste': {
+  \     '+': {-> systemlist('wl-paste --no-newline | sed -e "s/\r$//"', '', 1)},
+  \     '*': {-> systemlist('wl-paste --no-newline --primary | sed -e "s/\r$//"', '', 1)},
+  \   },
+  \   'cache_enabled': 1,
+  \ }
+endif
+
 " Replace cursor at same position upon next editing
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 \ | exe "normal! g'\"" | endif
