@@ -2,43 +2,84 @@
 # Copyright 2017 Adrien Vergé
 # Created on 2017-12-20
 # Updated on 2018-05-16
+# Updated on 2022-08-31
 
 set -eu
 
 usage() {
-  echo "usage:" >&2
-  echo "  $0 INPUT.PDF OUTPUT.PDF" >&2
-  echo "  $0 INPUT1.JPG INPUT2.PNG ... OUTPUT.PDF" >&2
-  echo "Transforms an input (images or PDF) into a PDF that look scanned." >&2
+  echo "usage: fake-scanned-pdf [--no-rotation-and-noise]" >&2
+  echo "                        [--dpi <200>] [--levels <50%,50%>]" >&2
+  echo "                        <inputs>... <output>" >&2
+  echo "examples:" >&2
+  echo "  fake-scanned-pdf --no-rotation-and-noise INPUT.PDF OUTPUT.PDF" >&2
+  echo "  fake-scanned-pdf INPUT1.JPG INPUT2.PNG ... OUTPUT.PDF" >&2
+  echo "Transforms an input (images or PDF) into a PDF that looks scanned." >&2
 }
 
-[ $# -lt 2 ] && { usage; exit 1; }
-
+ROTATION_AND_NOISE=1
+DPI=200
+LEVELS="50%,50%"
 INPUTS=()
-for f in "${@:1:$#-1}"; do
-  [ -f "$f" ] || { usage; exit 1; }
-  INPUTS=("${INPUTS[@]}" "$f")
+OUTPUT=
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --no-rotation-and-noise)
+      ROTATION_AND_NOISE=0
+      shift
+      ;;
+    --dpi)
+      DPI="$2"
+      [[ "$DPI" =~ ^[0-9]+$ ]] || { usage; exit 1; }
+      shift
+      shift
+      ;;
+    --levels)
+      LEVELS="$2"
+      shift
+      shift
+      ;;
+    -h|--help|-*|--*)
+      usage
+      exit 1
+      ;;
+    *)
+      if [ -n "$OUTPUT" ]; then
+        INPUTS+=("$OUTPUT")
+      fi
+      OUTPUT="$1"
+      shift
+      ;;
+  esac
 done
 
-OUTPUT="${@: -1}"
-extension="${OUTPUT##*.}"
-[ "${extension,,}" = "pdf" ] || { usage; exit 1; }
+[ "${#INPUTS[@]}" -gt 0 ] || { usage; exit 1; }
+for file in "${INPUTS[@]}"; do
+  [ -f "$file" ] || { echo "error: \"$file\" not found" >&2; exit 1; }
+done
+[[ ("$OUTPUT" == *.pdf) || ("$OUTPUT" == *.PDF) ]] || {
+  echo "error: \"$OUTPUT\" is not a PDF file" >&2; exit 1; }
 
-TMP="$(mktemp -d fake-scanned-XXXX)"
+TMP="$(mktemp -d fake-scanned-pdf-XXXX)"
+function cleanup {
+  rm -r "$TMP"
+}
+trap cleanup EXIT
 
-DPI=200
 W=$((DPI*827/100))  # A4, ex. for 200 DPI: 1654 pixels
 H=$((DPI*1169/100)) # A4, ex. for 200 DPI: 2338 pixels
 
 # If input is a PDF, convert to images
 first_input="${INPUTS[0]}"
 if [ ${#INPUTS[@]} -eq 1 ] && [ "${first_input##*.}" = "pdf" ]; then
+  echo "Converting input PDF to separate images…"
   convert -density $DPI "$first_input" \
           -resize ${W}x${H} \
           -alpha remove -background white -colorspace gray \
           "$TMP/page-%d.jpg"
 # If inputs are images, make them black & white and resize them to W×H
 else
+  echo "Converting inputs to well-sized images…"
   i=0
   for input in "${INPUTS[@]}"; do
     convert "$input" \
@@ -53,36 +94,42 @@ fi
 
 INPUTS=$(ls $TMP/page-*.jpg)
 
-# Rotate pages and add some noise
-for f in $INPUTS; do
-  # Explanation:
-  # - create a white image with random dots (use random + operators, see
-  #   http://www.imagemagick.org/Usage/canvas/#random)
-  # - multiply it (bumpmap) with a original image
-  # - rotate the image by a random amount
-  # - crop the image to W×H
-  convert -size ${W}x${H} xc: +noise Random \
-          -virtual-pixel tile -blur 0x2 -auto-level \
-          -level 3%,15% \
-          -sharpen 0x1.2 \
-          -channel G -separate \
-          "$f" \
-          -rotate 0.$(echo $RANDOM % 4 + 1 | bc) \
-          -compose bumpmap \
-          -composite \
-          -gravity center -crop ${W}x${H}+0+0 +repage \
-          "$f-step2.jpg"
-done
+if [ $ROTATION_AND_NOISE -eq 1 ]; then
+  # Rotate pages and add some noise
+  i=0
+  for f in $INPUTS; do
+    rotation=0.$(echo $RANDOM % 4 + 1 | bc)
+    echo "Applying noise and rotation=$rotation° to page $((i + 1))…"
+    # Explanation:
+    # - create a white image with random dots (use random + operators, see
+    #   http://www.imagemagick.org/Usage/canvas/#random)
+    # - multiply it (bumpmap) with a original image
+    # - rotate the image by a random amount
+    # - crop the image to W×H
+    convert -size ${W}x${H} xc: +noise Random \
+            -virtual-pixel tile -blur 0x2 -auto-level \
+            -level 3%,15% \
+            -sharpen 0x1.2 \
+            -channel G -separate \
+            "$f" \
+            -rotate $rotation \
+            -compose bumpmap \
+            -composite \
+            -gravity center -crop ${W}x${H}+0+0 +repage \
+            "$f-step2.jpg"
+    i=$((i + 1))
+  done
 
-INPUTS=$(ls $TMP/page-*-step2.jpg)
+  INPUTS=$(ls $TMP/page-*-step2.jpg)
+fi
 
-echo "Creating black and white PDF (A4, $DPI dpi)..."
+echo "Creating black and white PDF (A4, $DPI dpi)…"
 convert $INPUTS \
-        -level 60%,80% \
-        -monochrome -compress Group4 \
+        -level $LEVELS -monochrome \
+        -compress Group4 \
         -density ${DPI}x${DPI} -units PixelsPerInch \
         -resize ${W}x${H} \
         -repage ${W}x${H} \
-        "$TMP/SCAN0042.PDF"  # to give the PDF metadata a name
+        "$TMP/SCAN.PDF"  # to give the PDF metadata a name
 
-mv "$TMP/SCAN0042.PDF" "$OUTPUT"
+mv "$TMP/SCAN.PDF" "$OUTPUT"
