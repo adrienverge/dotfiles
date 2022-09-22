@@ -9,6 +9,14 @@ Créer un raccourci clavier de cette touche vers la commande :
 Trouvé grâce à
 http://blog.fpmurphy.com/2012/01/changing-the-activities-button-in-gnome-shell-3-2.html
 
+Ceci ↑ ne marche plus depuis Gnome 41 car appeler org.gnome.Shell.Eval n'est
+plus autorisé pour des raisons de sécurité.
+
+Mais il y a une autre solution qui marche bien (le 2022-09-22) pour assigner une
+touche spéciale (le * du pavé numérique) de mon clavier Kinesis Advantage à la
+touche <Super>.
+Pour ça voir le fichier LIS-MOI.raccourcis et `key <KPMU> { [ Super_L ] }`.
+
 Afficher les icônes sur le bureau
 ---------------------------------
 

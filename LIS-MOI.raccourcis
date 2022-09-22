@@ -32,6 +32,8 @@ Assigner AltGr + flèches à ← → ↑ ↓
     key <AC07> { [ j,     J,     U2193, U2195 ] };  // ↓ ↕
     key <AC08> { [ k,     K,     U2191, U21C5 ] };  // ↑ ⇅
     key <AC09> { [ l,     L,     U2192, U2194 ] };  // → ↔
+    // Map my Kinesis Advantage special key to <Super>
+    key <KPMU> { [ Super_L ] };
   };
   EOM'
 
