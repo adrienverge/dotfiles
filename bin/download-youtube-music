@@ -1,0 +1,39 @@
+#!/bin/bash
+# Copyright 2022 Adrien Vergé
+
+set -eu
+
+declare -a songs
+
+songs[0]='https://www.youtube.com/watch?v=6K6ODTZ7c10|Dire Straits|Brothers In Arms|1985|2|9|Money for Nothing'
+songs[1]='https://www.youtube.com/watch?v=jhdFe3evXpk|Dire Straits|Brothers In Arms|1985|9|9|Brothers In Arms'
+songs[2]='https://www.youtube.com/watch?v=…|…|…|…|…|…|…|'
+
+for song in "${songs[@]}"; do
+  IFS="|" read -r -a arr <<< "${song}"
+  url="${arr[0]}"
+  artist="${arr[1]}"
+  album="${arr[2]}"
+  year="${arr[3]}"
+  no="${arr[4]}"
+  nototal="${arr[5]}"
+  title="${arr[6]}"
+  mkdir -p "/tmp/music/$artist/$album"
+  cd "/tmp/music/$artist/$album"
+  file="$(printf '%02d' $no) $title"
+  f="$(find -name "$file.*")"
+  [ -n "$f" ] || youtube-dl -x -o "$file.%(ext)s" $url
+  f="$(find -name "$file.*")"
+  [ -f "$file.ogg" ] || \
+    ffmpeg -i "$f" \
+      -acodec libvorbis -aq 4 -vn -map_metadata 0 \
+      -metadata artist="$artist" \
+      -metadata album="$album" \
+      -metadata title="$title" \
+      -metadata date="$year" \
+      -metadata track="$no/$nototal" \
+      "$file.ogg"
+  cd -
+done
+
+tree "/tmp/music"
