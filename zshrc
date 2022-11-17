@@ -103,4 +103,4 @@ alias gl="git log --graph --abbrev-commit --decorate --date=short --format=forma
 zstyle ':completion:*:files' ignored-patterns '*.egg-info'
 zstyle ':completion:*:cd:*' ignored-patterns '*.egg-info'
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=7'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
