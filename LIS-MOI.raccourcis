@@ -37,9 +37,10 @@ Assigner AltGr + flèches à ← → ↑ ↓
   };
   EOM'
 
-Éditer /usr/share/X11/xkb/rules/evdev et ajouter dans `! option = symbols` :
+Éditer /usr/share/X11/xkb/rules/evdev et ajouter à la fin du fichier :
 
-  adrien:unicodearrows  =       +adrien(unicodearrows)
+  ! option = symbols
+    adrien:unicodearrows = +adrien(unicodearrows)
 
 Attention : chaque mise à jour du paquet DNF `xkeyboard-config` réécrase ce
 fichier... il faut donc parfois le remodifier.
