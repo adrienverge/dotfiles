@@ -1,4 +1,4 @@
-# sudo dnf install coffee-script elementary-terminal
+# sudo dnf install coffee-script
 # sudo npm install -g text-aid-too
 # systemctl --user daemon-reload
 # systemctl --user start text-aid-too
@@ -9,7 +9,7 @@
 Description=Text-Aid-Too
 
 [Service]
-ExecStart=/usr/bin/text-aid-too
+ExecStart=/usr/local/bin/text-aid-too
 Environment="TEXT_AID_TOO_SECRET=44vz7tg8LzrTDWq6nFTn"
 Environment="TEXT_AID_TOO_EDITOR=bash -c 'gnome-terminal --wait -- nvim $@' --"
 Environment="DISPLAY=:1"
