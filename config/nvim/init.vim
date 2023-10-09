@@ -234,7 +234,7 @@ endif
 " nvim-typescript
 " ---------------
 " Needs:
-" pip install --user neovim
+" pip install --user pynvim
 " sudo npm install -g neovim
 " cd ~/.vim/bundle/nvim-typescript; ./install.sh
 " :UpdateRemotePlugins
