@@ -197,9 +197,7 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 
 " python-mode
 " -----------
-
-let g:pymode_python = 'python3'
-" For it to work: pip3 install --user neovim
+" For it to work: pip install --user neovim
 
 let g:pymode_rope = 1
 let g:pymode_rope_lookup_project = 0
@@ -236,7 +234,7 @@ endif
 " nvim-typescript
 " ---------------
 " Needs:
-" pip3 install --user neovim
+" pip install --user neovim
 " sudo npm install -g neovim
 " cd ~/.vim/bundle/nvim-typescript; ./install.sh
 " :UpdateRemotePlugins
