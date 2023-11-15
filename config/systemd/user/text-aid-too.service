@@ -1,5 +1,4 @@
-# sudo dnf install coffee-script
-# sudo npm install -g text-aid-too
+# sudo cp config/systemd/user/text-aid-too /usr/local/bin/text-aid-too
 # systemctl --user daemon-reload
 # systemctl --user start text-aid-too
 # systemctl --user enable text-aid-too
