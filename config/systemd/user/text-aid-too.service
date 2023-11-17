@@ -1,4 +1,6 @@
 # sudo cp config/systemd/user/text-aid-too /usr/local/bin/text-aid-too
+# cd /usr/local/bin && sudo npm install watchr@2 optimist@0.6 ws@8 markdown@0.5 html@1
+# sudo rm -rf /usr/local/bin/package.json /usr/local/bin/package-lock.json
 # systemctl --user daemon-reload
 # systemctl --user start text-aid-too
 # systemctl --user enable text-aid-too
