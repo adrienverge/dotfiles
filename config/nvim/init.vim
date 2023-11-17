@@ -199,6 +199,14 @@ let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
 " -----------
 " For it to work: pip install --user neovim
 
+" As of 2023-11-17 python-mode is broken for Fedora 39:
+" https://github.com/neovim/pynvim/issues/478#issuecomment-1636076305
+" My temp fix:
+"   git clone https://github.com/neovim/pynvim.git /tmp/pynvim
+"   cd /tmp/pynvim
+"   python setup.py sdist
+"   pip install --user -U dist/pynvim-0.5.0.dev0.tar.gz
+
 let g:pymode_rope = 1
 let g:pymode_rope_lookup_project = 0
 let g:pymode_rope_goto_definition_cmd = 'e'
