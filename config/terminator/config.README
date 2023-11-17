@@ -1,6 +1,9 @@
 Config pas mal :
 https://github.com/ghuntley/terminator-solarized/blob/79967a3/config#L19-L23
 
+[global_config]
+  window_state = maximise
+  borderless = True
 [profiles]
   [[default]]
     background_color = "#eee8d5"
