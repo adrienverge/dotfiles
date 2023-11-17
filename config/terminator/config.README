@@ -1,8 +1,8 @@
 Config pas mal :
 https://github.com/ghuntley/terminator-solarized/blob/79967a3/config#L19-L23
 
-    use_system_font = False
-    font = Mono 14
+[profiles]
+  [[default]]
     background_color = "#eee8d5"
     cursor_color = "#002b36"
     foreground_color = "#002b36"
