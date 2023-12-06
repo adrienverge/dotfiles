@@ -130,6 +130,9 @@ convert $INPUTS \
         -density ${DPI}x${DPI} -units PixelsPerInch \
         -resize ${W}x${H} \
         -repage ${W}x${H} \
-        "$TMP/SCAN.PDF"  # to give the PDF metadata a name
+        "$TMP/scan.pdf"
 
-mv "$TMP/SCAN.PDF" "$OUTPUT"
+exiftool -q -all:all= "$TMP/scan.pdf"  # remove references to ImageMagick
+exiftool -q "-Title=SCAN" "$TMP/scan.pdf"
+exiftool -q "-CreateDate=$(date +'%F %T %z')" "$TMP/scan.pdf"
+qpdf --linearize "$TMP/scan.pdf" "$OUTPUT"  # really delete old tags
