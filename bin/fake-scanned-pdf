@@ -7,7 +7,7 @@
 set -eu
 
 usage() {
-  echo "usage: fake-scanned-pdf [--no-rotation-and-noise]" >&2
+  echo "usage: fake-scanned-pdf [--no-rotation-and-noise] [--no-halftoning]" >&2
   echo "                        [--dpi <200>] [--levels <50%,50%>]" >&2
   echo "                        <inputs>... <output>" >&2
   echo "examples:" >&2
@@ -17,6 +17,7 @@ usage() {
 }
 
 ROTATION_AND_NOISE=1
+HALFTONING="-ordered-dither h4x4a"
 DPI=200
 LEVELS="50%,50%"
 INPUTS=()
@@ -26,6 +27,10 @@ while [[ $# -gt 0 ]]; do
   case $1 in
     --no-rotation-and-noise)
       ROTATION_AND_NOISE=0
+      shift
+      ;;
+    --no-halftoning)
+      HALFTONING=
       shift
       ;;
     --dpi)
@@ -76,6 +81,7 @@ if [ ${#INPUTS[@]} -eq 1 ] && [ "${first_input##*.}" = "pdf" ]; then
   convert -density $DPI "$first_input" \
           -resize ${W}x${H} \
           -alpha remove -background white -colorspace gray \
+          $HALFTONING \
           "$TMP/page-%d.jpg"
 # If inputs are images, make them black & white and resize them to W×H
 else
@@ -86,6 +92,7 @@ else
             -resize ${W}x${H} \
             -gravity center \
             -alpha remove -background white -colorspace gray \
+            $HALFTONING \
             -extent ${W}x${H} \
             "$TMP/page-$(printf "%02d" $i).jpg"
     i=$((i + 1))
