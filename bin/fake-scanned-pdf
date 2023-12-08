@@ -3,34 +3,41 @@
 # Created on 2017-12-20
 # Updated on 2018-05-16
 # Updated on 2022-08-31
+# Updated on 2023-12-08
 
 set -eu
 
 usage() {
-  echo "usage: fake-scanned-pdf [--no-rotation-and-noise] [--no-halftoning]" >&2
-  echo "                        [--dpi <200>] [--levels <50%,50%>]" >&2
+  echo "usage: fake-scanned-pdf [--no-rotation] [--no-noise]" >&2
+  echo "                        [--no-halftoning] [--levels <20%,80%>]" >&2
+  echo "                        [--dpi <200>]" >&2
   echo "                        <inputs>... <output>" >&2
   echo "examples:" >&2
-  echo "  fake-scanned-pdf --no-rotation-and-noise INPUT.PDF OUTPUT.PDF" >&2
+  echo "  fake-scanned-pdf --no-rotation --no-noise INPUT.PDF OUTPUT.PDF" >&2
   echo "  fake-scanned-pdf INPUT1.JPG INPUT2.PNG ... OUTPUT.PDF" >&2
   echo "Transforms an input (images or PDF) into a PDF that looks scanned." >&2
 }
 
-ROTATION_AND_NOISE=1
-HALFTONING="-ordered-dither h4x4a"
+ROTATION=1
+NOISE=1
+HALFTONING=1
 DPI=200
-LEVELS="50%,50%"
+LEVELS="20%,80%"
 INPUTS=()
 OUTPUT=
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --no-rotation-and-noise)
-      ROTATION_AND_NOISE=0
+    --no-rotation)
+      ROTATION=0
+      shift
+      ;;
+    --no-noise)
+      NOISE=0
       shift
       ;;
     --no-halftoning)
-      HALFTONING=
+      HALFTONING=0
       shift
       ;;
     --dpi)
@@ -74,69 +81,58 @@ trap cleanup EXIT
 W=$((DPI*827/100))  # A4, ex. for 200 DPI: 1654 pixels
 H=$((DPI*1169/100)) # A4, ex. for 200 DPI: 2338 pixels
 
-# If input is a PDF, convert to images
-first_input="${INPUTS[0]}"
-if [ ${#INPUTS[@]} -eq 1 ] && [ "${first_input##*.}" = "pdf" ]; then
-  echo "Converting input PDF to separate images…"
-  convert -density $DPI "$first_input" \
-          -resize ${W}x${H} \
-          -alpha remove -background white -colorspace gray \
-          $HALFTONING \
-          "$TMP/page-%d.jpg"
-# If inputs are images, make them black & white and resize them to W×H
-else
-  echo "Converting inputs to well-sized images…"
-  i=0
-  for input in "${INPUTS[@]}"; do
-    convert "$input" \
-            -resize ${W}x${H} \
-            -gravity center \
-            -alpha remove -background white -colorspace gray \
-            $HALFTONING \
-            -extent ${W}x${H} \
-            "$TMP/page-$(printf "%02d" $i).jpg"
-    i=$((i + 1))
-  done
-fi
+# List all pages of all inputs (whatever they are PDFs or simple images)
+pages=()
+while read line; do
+  pages+=("$line")
+done < <(identify -format '%i[%p]\n' "${INPUTS[@]}")
+echo "Listed ${#pages[@]} pages to generate"
 
-INPUTS=$(ls $TMP/page-*.jpg)
-
-if [ $ROTATION_AND_NOISE -eq 1 ]; then
-  # Rotate pages and add some noise
-  i=0
-  for f in $INPUTS; do
-    rotation=0.$(echo $RANDOM % 4 + 1 | bc)
-    echo "Applying noise and rotation=$rotation° to page $((i + 1))…"
-    # Explanation:
-    # - create a white image with random dots (use random + operators, see
-    #   http://www.imagemagick.org/Usage/canvas/#random)
-    # - multiply it (bumpmap) with a original image
-    # - rotate the image by a random amount
-    # - crop the image to W×H
+for i in "${!pages[@]}"; do
+  echo -n "Page $((i + 1))"
+  rotation=
+  if [ $ROTATION -eq 1 ]; then
+    rotation=$(echo "scale=2; $RANDOM/32768-0.5" | bc)
+    echo -n ", applying rotation=$rotation°"
+    rotation="-rotate $rotation -crop ${W}x${H}+0+0 +repage"
+  fi
+  echo -n ", resizing"
+  noise=
+  if [ $NOISE -eq 1 ]; then
+    echo -n ", adding noise"
     convert -size ${W}x${H} xc: +noise Random \
             -virtual-pixel tile -blur 0x2 -auto-level \
             -level 3%,15% \
             -sharpen 0x1.2 \
             -channel G -separate \
-            "$f" \
-            -rotate $rotation \
-            -compose bumpmap \
-            -composite \
-            -gravity center -crop ${W}x${H}+0+0 +repage \
-            "$f-step2.jpg"
-    i=$((i + 1))
-  done
+            "$TMP/noise.jpg"
+     noise="$TMP/noise.jpg -compose bumpmap -composite"
+  fi
+  if [ $HALFTONING -eq 1 ]; then
+    echo -n ", halftoning"
+    halftoning="-ordered-dither h4x4a"
+  else
+    halftoning="-monochrome"
+  fi
+  echo "…"
 
-  INPUTS=$(ls $TMP/page-*-step2.jpg)
-fi
+  convert -density $DPI "${pages[$i]}" \
+          $rotation \
+          -resize ${W}x${H} \
+          -gravity center -extent ${W}x${H} \
+          -alpha remove -background white -colorspace gray \
+          -level $LEVELS \
+          $noise \
+          $halftoning \
+          "$TMP/page-$(printf "%02d" $i).jpg"
+done
 
-echo "Creating black and white PDF (A4, $DPI dpi)…"
-convert $INPUTS \
-        -level $LEVELS -monochrome \
-        -compress Group4 \
+pages=$(ls $TMP/page-*.jpg)
+
+echo "Creating Group 4 compressed PDF (A4, $DPI dpi)…"
+convert $pages \
+        -level 50% -monochrome -compress Group4 \
         -density ${DPI}x${DPI} -units PixelsPerInch \
-        -resize ${W}x${H} \
-        -repage ${W}x${H} \
         "$TMP/scan.pdf"
 
 exiftool -q -all:all= "$TMP/scan.pdf"  # remove references to ImageMagick
