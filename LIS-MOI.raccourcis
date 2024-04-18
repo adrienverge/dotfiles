@@ -21,10 +21,12 @@ Assigner AltGr + flèches à ← → ↑ ↓
   sudo su -c 'umask 0022; cat >/usr/share/X11/xkb/symbols/adrien <<EOM
   partial alphanumeric_keys
   xkb_symbols "unicodearrows" {
-    key <LEFT> { [ Left,  Left,  U2190, U21C6 ] };  // ← ⇆
-    key <RGHT> { [ Right, Right, U2192, U2194 ] };  // → ↔
-    key <UP>   { [ Up,    Up,    U2191, U21C5 ] };  // ↑ ⇅
-    key <DOWN> { [ Down,  Down,  U2193, U2195 ] };  // ↓ ↕
+    key <LEFT> { [ Left,   Left,    U2190, U21C6 ] };  // ← ⇆
+    key <RGHT> { [ Right,  Right,   U2192, U2194 ] };  // → ↔
+    key <UP>   { [ Up,     Up,      U2191, U21C5 ] };  // ↑ ⇅
+    key <DOWN> { [ Down,   Down,    U2193, U2195 ] };  // ↓ ↕
+    key <DOWN> { [ Down,   Down,    U2193, U2195 ] };  // ↓ ↕
+    key <AB09> { [ period, greater, U2026, U22EF ] };  // … ⋯
     // Additional mappings that work in Chrome, see:
     // https://bugs.chromium.org/p/chromium/issues/detail?id=394552
     // https://askubuntu.com/questions/668853/google-chrome-ignores-xmodmap-key-mapping
