@@ -34,6 +34,7 @@ Plugin 'Shougo/denite.nvim'
 Plugin 'digitaltoad/vim-pug'
 Plugin 'Konfekt/FastFold'
 Plugin 'tmhedberg/SimpylFold'
+Plugin 'lambdalisue/pastefix.vim'
 
 call vundle#end()
 filetype plugin indent on
