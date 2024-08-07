@@ -100,12 +100,12 @@ for i in "${!pages[@]}"; do
   noise=
   if [ $NOISE -eq 1 ]; then
     echo -n ", adding noise"
-    convert -size ${W}x${H} xc: +noise Random \
-            -virtual-pixel tile -blur 0x2 -auto-level \
-            -level 3%,15% \
-            -sharpen 0x1.2 \
-            -channel G -separate \
-            "$TMP/noise.jpg"
+    magick -size ${W}x${H} xc: +noise Random \
+           -virtual-pixel tile -blur 0x2 -auto-level \
+           -level 3%,15% \
+           -sharpen 0x1.2 \
+           -channel G -separate \
+           "$TMP/noise.jpg"
      noise="$TMP/noise.jpg -compose bumpmap -composite"
   fi
   if [ $HALFTONING -eq 1 ]; then
@@ -116,24 +116,24 @@ for i in "${!pages[@]}"; do
   fi
   echo "…"
 
-  convert -density $DPI "${pages[$i]}" \
-          $rotation \
-          -resize ${W}x${H} \
-          -gravity center -extent ${W}x${H} \
-          -alpha remove -background white -colorspace gray \
-          -level $LEVELS \
-          $noise \
-          $halftoning \
-          "$TMP/page-$(printf "%02d" $i).jpg"
+  magick -density $DPI "${pages[$i]}" \
+         $rotation \
+         -resize ${W}x${H} \
+         -gravity center -extent ${W}x${H} \
+         -alpha remove -background white -colorspace gray \
+         -level $LEVELS \
+         $noise \
+         $halftoning \
+         "$TMP/page-$(printf "%02d" $i).jpg"
 done
 
 pages=$(ls $TMP/page-*.jpg)
 
 echo "Creating Group 4 compressed PDF (A4, $DPI dpi)…"
-convert $pages \
-        -level 50% -monochrome -compress Group4 \
-        -density ${DPI}x${DPI} -units PixelsPerInch \
-        "$TMP/scan.pdf"
+magick $pages \
+       -level 50% -monochrome -compress Group4 \
+       -density ${DPI}x${DPI} -units PixelsPerInch \
+       "$TMP/scan.pdf"
 
 exiftool -q -all:all= "$TMP/scan.pdf"  # remove references to ImageMagick
 exiftool -q "-Title=SCAN" "$TMP/scan.pdf"
