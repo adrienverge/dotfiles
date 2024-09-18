@@ -1,39 +1,158 @@
 #!/bin/bash
 # Copyright 2022 Adrien Vergé
+# Rewritten on 2023-08-11
+# Enhanced on 2024-09-18
 
 set -eu
 
-declare -a songs
+INPUT=$(cat <<-EOF
+https://www.youtube.com/watch?v=M51ViOnbus0
+L'Impératrice
+Dreaming of You (feat. Isaac Delusion)
+6/11
+Matahari
+2018
 
-songs[0]='https://www.youtube.com/watch?v=6K6ODTZ7c10|Dire Straits|Brothers In Arms|1985|2|9|Money for Nothing'
-songs[1]='https://www.youtube.com/watch?v=jhdFe3evXpk|Dire Straits|Brothers In Arms|1985|9|9|Brothers In Arms'
-songs[2]='https://www.youtube.com/watch?v=…|…|…|…|…|…|…|'
+https://www.youtube.com/watch?v=AOSNJj0WyPQ
+L'Impératrice
+Vacances
+5/11
+Matahari
+2018
 
-for song in "${songs[@]}"; do
-  IFS="|" read -r -a arr <<< "${song}"
-  url="${arr[0]}"
-  artist="${arr[1]}"
-  album="${arr[2]}"
-  year="${arr[3]}"
-  no="${arr[4]}"
-  nototal="${arr[5]}"
-  title="${arr[6]}"
+https://www.youtube.com/watch?v=6osNgTwRn-M
+L'Impératrice
+I Wanna Dance with Somebody (Who Loves Me) - InVersions 80s
+1/1
+I Wanna Dance with Somebody (Who Loves Me) - InVersions 80s
+2021
+
+https://www.youtube.com/watch?v=_SLjLKWt96Y
+L'Impératrice
+Submarine
+1/13
+Tako Tsubo
+2021
+
+https://www.youtube.com/watch?v=-V7y1bjxPRo
+L'Impératrice
+Agitations tropicales
+2/6
+Odyssée
+2015
+
+https://www.youtube.com/watch?v=3uPJ1Tl5U94
+L'Impératrice
+Sonate Pacifique
+3/5
+Sonate Pacifique
+2014
+
+https://www.youtube.com/watch?v=eyk-Sliy8RU
+L'Impératrice
+Erreur 404
+2/11
+Matahari
+2018
+
+https://www.youtube.com/watch?v=hQ5PFlYU9sk
+L'Impératrice
+Vanille Fraise
+1/1
+Vanille Fraise
+2016
+
+https://www.youtube.com/watch?v=zXLFHhVcWEQ
+L'Impératrice
+Anomalie bleue
+4/13
+Tako Tsubo
+2021
+
+https://www.youtube.com/watch?v=zUifUElrx5M
+L'Impératrice
+Parfum thérémine
+3/6
+Odyssée
+2015
+
+https://www.youtube.com/watch?v=RZmEFQGc_D0
+L'Impératrice
+La lune
+5/6
+Odyssée
+2015
+Parfum thérémine
+
+https://www.youtube.com/watch?v=OciWTvRnHfw
+L'Impératrice
+Paris
+4/11
+Matahari
+2018
+
+https://www.youtube.com/watch?v=S2NZLSfAeIc
+L'Impératrice
+Odyssée
+4/6
+Odyssée
+2015
+
+https://www.youtube.com/watch?v=2LGrMVypJ2s
+L'Impératrice
+Heartquake
+1/1
+Heartquake
+2023
+EOF
+)
+
+for ((i=0; ; i++)); do
+  data=$(python -c '
+import sys
+print(dict(enumerate(sys.stdin.read().split("\n\n"))).get('$i', ""))
+' <<<"$INPUT")
+  [ -z "$data" ] && break
+  url=$(sed -n '1p' <<<"$data")
+  id=$(sed 's/^.*v=//' <<<"$url")
+  artist=$(sed -n '2p' <<<"$data")
+  title=$(sed -n '3p' <<<"$data")
+  number=$(sed -n '4p' <<<"$data" | cut -d/ -f1)
+  total=$(sed -n '4p' <<<"$data" | cut -d/ -f2)
+  album=$(sed -n '5p' <<<"$data")
+  year=$(sed -n '6p' <<<"$data")
+
+  echo $url
+  echo $artist
+  echo $title
+  echo $number/$total
+  echo $album
+  echo $year
+
+  # Assert the audio format I like is present:
+  yt-dlp --list-formats "$url" 2>/dev/null \
+    | grep -qE '^251 .* audio only .* opus .* medium' \
+    || { echo "error: audio format 251 not found" >&2; exit 1; }
+  # For development, use option -k:
+  yt-dlp --extract-audio -f 251 "$url"
+
+  file=$(find -maxdepth 1 -name '*'$id'*.opus')
+  [ $(wc -l <<<"$file") -eq 1 ] \
+    || { echo "error: multiple files for \"$id\"" >&2; exit 1; }
+  final_file="$(printf '%02d' $number) $title.opus"
+
+  temp=$(mktemp -u download-music.XXXX.opus)
+  ffmpeg -i "$file" \
+    -c copy \
+    -metadata title="$title" \
+    -metadata artist="$artist" \
+    -metadata album="$album" \
+    -metadata track="$number/$total" \
+    -metadata date="$year" \
+    "$temp"
+
   mkdir -p "/tmp/music/$artist/$album"
-  cd "/tmp/music/$artist/$album"
-  file="$(printf '%02d' $no) $title"
-  f="$(find -name "$file.*")"
-  [ -n "$f" ] || youtube-dl -x -o "$file.%(ext)s" $url
-  f="$(find -name "$file.*")"
-  [ -f "$file.ogg" ] || \
-    ffmpeg -i "$f" \
-      -acodec libvorbis -aq 4 -vn -map_metadata 0 \
-      -metadata artist="$artist" \
-      -metadata album="$album" \
-      -metadata title="$title" \
-      -metadata date="$year" \
-      -metadata track="$no/$nototal" \
-      "$file.ogg"
-  cd -
+  mv "$temp" "/tmp/music/$artist/$album/$final_file"
 done
 
 tree "/tmp/music"
