@@ -1,121 +1,120 @@
 #!/usr/bin/env node
 // Transpiled from server.coffee version 1.1.7 by Adrien on 2023-11-15
 
-var WSS, args, config, defaultEditor, formatMarkdown, getEditCommand, handler, helpText, i, len, markdownToHtml, module, ref, secret, version, wss;
+const VERSION = "2.0.0";
 
-secret = process.env.TEXT_AID_TOO_SECRET;
+import {exec} from 'child_process';
+import * as fs from 'fs';
+import {tmpdir} from 'os';
+import {join} from 'path';
+import {parseArgs} from 'util';
 
-ref = ["watchr", "optimist", "ws", "markdown", "html", "os", "fs", "path", "child_process"];
-for (i = 0, len = ref.length; i < len; i++) {
-  module = ref[i];
-  try {
-    global[module] = require(module);
-  } catch (err) {
-    console.log("ERROR\n" + module + " is not available: sudo npm install -g " + module);
-    process.exit(1);
-  }
-}
+import {WebSocketServer} from 'ws';
 
-config = {
+const secret = process.env.TEXT_AID_TOO_SECRET;
+
+const config = {
   port: "9293",
   host: "localhost",
   editor: "gvim -f"
 };
 
-defaultEditor = process.env.TEXT_AID_TOO_EDITOR ? process.env.TEXT_AID_TOO_EDITOR : config.editor;
+const args = parseArgs({options: {
+  'help': {type: 'boolean'},
+  'port': {type: 'string'},
+  'editor': {type: 'string'},
+}});
 
-version = "1.1.7";
-
-helpText = "Usage:\n  text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--markdown]\n\nExample:\n  export TEXT_AID_TOO_EDITOR=\"gvim -f\"\n  TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293\n\nMarkdown (experimental):\n  With the \"--markdown\" flag, text-aid-too tries to find non-HTML\n  paragraphs in HTML texts and parses them as markdown.  This only\n  applies to texts from contentEditable elements (e.g. the GMail\n  compose window).\n\nEnvironment variables:\n  TEXT_AID_TOO_EDITOR: the editor command to use.\n  TEXT_AID_TOO_SECRET: the shared secret; set this in the extension too.\n\nVersion: " + version;
-
-args = optimist.usage(helpText).alias("h", "help")["default"]("port", config.port)["default"]("editor", defaultEditor)["default"]("markdown", false).argv;
-
-if (args.help) {
-  optimist.showHelp();
+if (args.values.help) {
+  console.log(
+    "Usage:\n" +
+    "text-aid-too [--port PORT] [--editor EDITOR-COMMAND]\n" +
+    "\n" +
+    "Example:\n" +
+    "export TEXT_AID_TOO_EDITOR=\"gvim -f\"\n" +
+    "TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293\n" +
+    "\n" +
+    "Environment variables:\n" +
+    "TEXT_AID_TOO_EDITOR: the editor command to use.\n" +
+    "TEXT_AID_TOO_SECRET: the shared secret; set this in the extension too.\n" +
+    "\n" +
+    "Version: " + VERSION + "\n");
   process.exit(0);
 }
 
-console.log("server  ws://" + config.host + ":" + args.port + "\nsecret  " + (secret != null ? secret : '<NONE>') + "\neditor  " + args.editor + "\nversion " + version);
+args.port = args.port || config.port;
+args.editor = args.editor || process.env.TEXT_AID_TOO_EDITOR || config.editor;
 
-WSS = ws.Server;
+console.log(
+  "server  ws://" + config.host + ":" + args.port + "\n" +
+  //"secret  " + (secret != null ? secret : '<NONE>') + "\n" +
+  "editor  " + args.editor + "\n" +
+  "version " + VERSION);
 
-wss = new WSS({
+const wss = new WebSocketServer({
   port: args.port,
   host: config.host
 });
 
-wss.on("connection", function(ws) {
-  return ws.on("message", handler(ws));
-});
+wss.on("connection", ws => ws.on("message", handler(ws)));
 
-getEditCommand = function(filename) {
-  var command;
-  command = 0 <= args.editor.indexOf("%s") ? args.editor.replace("%s", filename) : args.editor + " " + filename;
+function getEditCommand(filename) {
+  const command = 0 <= args.editor.indexOf("%s") ? args.editor.replace("%s", filename) : args.editor + " " + filename;
   console.log("exec:", command);
   return command;
-};
+}
 
-handler = function(ws) {
+function handler(ws) {
   return function(message) {
-    var exit, handlers, onExit, request, sendResponse;
-    request = JSON.parse(message);
-    onExit = [];
-    onExit.push(function() {
-      return ws.close();
-    });
-    exit = function(continuation) {
-      var callback, j, len1, ref1;
+    const request = JSON.parse(message);
+    let onExit = [];
+    onExit.push(() => ws.close());
+    function exit(continuation) {
       if (continuation == null) {
         continuation = null;
       }
-      ref1 = onExit.reverse();
-      for (j = 0, len1 = ref1.length; j < len1; j++) {
-        callback = ref1[j];
+      const ref1 = onExit.reverse();
+      for (let j = 0; j < ref1.length; j++) {
+        const callback = ref1[j];
         callback();
       }
       onExit = [];
-      return typeof continuation === "function" ? continuation() : void 0;
-    };
+      return typeof continuation === "function" ? continuation() : undefined;
+    }
     if ((secret != null) && 0 < secret.length) {
       if (!((request.secret != null) && request.secret === secret)) {
         console.log("mismatched or invalid secret; aborting request:\n  required secret: " + secret + "\n  received secret: " + request.secret);
         return exit();
       }
     }
-    sendResponse = function(response, continuation) {
+    function sendResponse(response, continuation) {
       if (continuation == null) {
         continuation = null;
       }
-      response.serverVersion = version;
+      response.serverVersion = VERSION;
       ws.send(JSON.stringify(response));
-      return typeof continuation === "function" ? continuation() : void 0;
-    };
-    handlers = {
+      return typeof continuation === "function" ? continuation() : undefined;
+    }
+    const handlers = {
       ping: function() {
         console.log("ping: ok");
         request.isOk = true;
         return sendResponse(request, exit);
       },
       edit: function() {
-        var directory, filename, ref1, ref2, ref3, suffix, timestamp, username;
-        username = (ref1 = process.env.USER) != null ? ref1 : "unknown";
-        directory = (ref2 = process.env.TMPDIR) != null ? ref2 : os.tmpdir();
-        timestamp = process.hrtime().join("-");
-        suffix = request.isContentEditable ? "html" : "txt";
-        filename = path.join(directory, username + "-text-aid-too-" + timestamp + "." + suffix);
+        const username = process.env.USER || "unknown";
+        const directory = process.env.TMPDIR || tmpdir();
+        const timestamp = process.hrtime().join("-");
+        const suffix = request.isContentEditable ? "html" : "txt";
+        const filename = join(directory, username + "-text-aid-too-" + timestamp + "." + suffix);
         console.log("edit:", filename);
-        onExit.push(function() {
-          return console.log("  done:", filename);
-        });
-        return fs.writeFile(filename, (ref3 = request.originalText) != null ? ref3 : request.text, function(error) {
-          var child, monitor, sendText;
+        onExit.push(() => console.log("  done:", filename));
+        return fs.writeFile(filename, request.originalText != null ? request.originalText : request.text, error => {
           if (error) {
             return exit();
           }
-          onExit.push(function() {
-            return fs.unlink(filename, function() {});
-          });
-          sendText = function(continuation) {
+          onExit.push(() => fs.unlink(filename, () => {}));
+          function sendText(continuation) {
             if (continuation == null) {
               continuation = null;
             }
@@ -126,24 +125,22 @@ handler = function(ws) {
               console.log("  send: " + filename + " [" + data.length + "]");
               data = data.replace(/\n$/, "");
               request.text = request.originalText = data;
-              if (request.isContentEditable && args.markdown) {
-                request.text = formatMarkdown(data);
-              }
               return sendResponse(request, continuation);
             });
-          };
-          monitor = watchr.watch({
-            path: filename,
-            listener: sendText,
-            catchupDelay: 400,
-            preferredMethods: ['watchFile', 'watch'],
-            interval: 500
+          }
+
+          let debounce;
+          fs.watch(filename, () => {
+            if (debounce)
+              clearTimeout(debounce);
+            debounce = setTimeout(() => {
+              debounce = undefined;
+              sendText();
+            }, 300);
           });
-          onExit.push(function() {
-            return monitor.close();
-          });
-          child = child_process.exec(getEditCommand(filename));
-          return child.on("exit", function(error) {
+
+          const child = exec(getEditCommand(filename));
+          return child.on("exit", error => {
             if (error) {
               return exit();
             } else {
@@ -159,34 +156,4 @@ handler = function(ws) {
       return console.log("error; unknown request:", request);
     }
   };
-};
-
-markdownToHtml = function(text) {
-  try {
-    return html.prettyPrint(markdown.markdown.toHTML(text));
-  } catch (err) {
-    return text;
-  }
-};
-
-formatMarkdown = function(text) {
-  var flushMarkdown, input, output, paragraph, ref1, texts;
-  ref1 = [[], [], text.split("\n\n").reverse()], output = ref1[0], texts = ref1[1], input = ref1[2];
-  flushMarkdown = function() {
-    if (0 < texts.length) {
-      output.push(markdownToHtml(texts.join("\n\n")));
-      return texts = [];
-    }
-  };
-  while (0 < input.length) {
-    paragraph = input.pop();
-    if (/<\/?[a-zA-Z]+/.test(paragraph)) {
-      flushMarkdown();
-      output.push(paragraph);
-    } else {
-      texts.push(paragraph);
-    }
-  }
-  flushMarkdown();
-  return output.join("\n\n");
-};
+}
