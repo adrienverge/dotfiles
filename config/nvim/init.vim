@@ -27,14 +27,15 @@ Plugin 'benekastah/neomake'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'rust-lang/rust.vim'
 Plugin 'vivien/vim-linux-coding-style'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'mhartington/nvim-typescript'
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'Shougo/denite.nvim'
 Plugin 'digitaltoad/vim-pug'
 Plugin 'Konfekt/FastFold'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'lambdalisue/pastefix.vim'
+Plugin 'neovim/nvim-lspconfig'
+Plugin 'nvim-lua/plenary.nvim'
+Plugin 'pmizio/typescript-tools.nvim'
+Plugin 'hrsh7th/cmp-nvim-lsp'
+Plugin 'hrsh7th/nvim-cmp'
 
 call vundle#end()
 filetype plugin indent on
@@ -240,15 +241,11 @@ elseif executable('eslint')
   let g:neomake_javascript_enabled_makers = ['eslint']
 endif
 
-" nvim-typescript
-" ---------------
-" Needs:
-" pip install --user pynvim
-" sudo npm install -g neovim
-" cd ~/.vim/bundle/nvim-typescript; ./install.sh
-" :UpdateRemotePlugins
+" typescript-tools.nvim
+" ---------------------
+" Requires package 'typescript' to use /usr/bin/tsserver.
 
-let g:deoplete#enable_at_startup = 1
-autocmd FileType typescript nnoremap <buffer> <C-c>g :TSDef<CR>
+lua require('lsp_config')
+autocmd FileType typescript nnoremap <buffer> <C-c>g :TSToolsGoToSourceDefinition<CR>
 
 " vi: ts=2 sw=2
