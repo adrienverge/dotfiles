@@ -32,3 +32,12 @@ sudo cp /usr/lib64/chromium-browser/libffmpeg.so \
 sudo cp /tmp/libffmpeg.so /usr/lib64/chromium-browser/libffmpeg.so
 
 Restart Chromium.
+
+Update: 2025-04-14
+------------------
+
+Chromium 135 broke support for the US-international keyboard (e.g. to type `ç`
+or `→`). Rolling back to Chromium 134 solves the issue. Otherwise, enabling the
+"Wayland text-input-v3" experimental feature works too:
+chrome://flags/#wayland-text-input-v3
+https://issues.chromium.org/issues/407930251#comment4
