@@ -39,3 +39,17 @@ or `→`). Rolling back to Chromium 134 solves the issue. Otherwise, enabling th
 "Wayland text-input-v3" experimental feature works too:
 chrome://flags/#wayland-text-input-v3
 https://issues.chromium.org/issues/407930251#comment4
+
+2025-04
+-------
+
+Since Gnome 48 and Chromium 134 I'm hitting this bug: every time I launch a
+Chromium window, it shows a popup asking to enable shortcuts from browser
+extensions.
+
+On 2025-04-23 I applied this fix:
+https://issues.chromium.org/issues/404298968#comment5
+and could remove it on 2025-05-05 because the issue was fixed.
+
+But in 2025-07 it came back, maybe a regression:
+https://issues.chromium.org/issues/404298968#comment7
