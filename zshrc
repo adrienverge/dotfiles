@@ -5,7 +5,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="adrien-light"
+ZSH_THEME="adrien-tokyonight-day"
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -51,12 +51,12 @@ plugins=(
   zsh-autosuggestions
 )
 
+source $ZSH/oh-my-zsh.sh
+
 # User configuration
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:$HOME/.local/bin:$HOME/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
-
-source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -65,7 +65,7 @@ source $ZSH/oh-my-zsh.sh
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
-#   export EDITOR='mvim'
+#   export EDITOR='nvim'
 # fi
 
 # Compilation flags
@@ -94,6 +94,7 @@ alias top=htop
 alias vi=nvim
 alias vim=nvim
 alias go=gnome-open
+alias ng=node_modules/.bin/ng
 
 export EDITOR=nvim
 export LESS=-FRSX
@@ -102,5 +103,3 @@ alias gl="git log --graph --abbrev-commit --decorate --date=short --format=forma
 
 zstyle ':completion:*:files' ignored-patterns '*.egg-info'
 zstyle ':completion:*:cd:*' ignored-patterns '*.egg-info'
-
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=250'
