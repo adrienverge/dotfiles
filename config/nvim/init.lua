@@ -1,7 +1,7 @@
 --[[
 
 Neovim configuration completely rewritten from Vimscript to Lua in 2025 while
-switchwing from Vundle.vim plugin manager to lazy.nvim.
+switchwing from Vundle.vim plugin manager to Lazy.nvim.
 I started from the kickstart.nvim single-file project and adapted it:
 https://github.com/nvim-lua/kickstart.nvim/blob/6ba2408/init.lua
 
@@ -100,7 +100,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 
 -- Adrien: easy navigation between buffers / tabs
 vim.keymap.set('n', '<Tab><Tab>j', '<cmd>bn<CR>', { desc = 'Move to next buffer' })
-vim.keymap.set('n', '<Tab><Tab>k', '<cmd>bn<CR>', { desc = 'Move to previous buffer' })
+vim.keymap.set('n', '<Tab><Tab>k', '<cmd>bp<CR>', { desc = 'Move to previous buffer' })
 vim.keymap.set('n', '<Tab><Tab><Tab>', ':ls<CR>', { desc = 'List all buffers' })
 vim.keymap.set('n', '<Tab><Tab>1', ':b 1<CR>', { desc = 'Move to buffer 1' })
 vim.keymap.set('n', '<Tab><Tab>2', ':b 2<CR>', { desc = 'Move to buffer 2' })
