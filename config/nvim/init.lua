@@ -164,6 +164,16 @@ require('lazy').setup({
     },
   },
 
+  { -- Adrien: show git blame with :BlameToggle
+    -- After that press Enter to see the commit, Tab to see the file prior to
+    -- the selected commit, Backscape to go back
+    'FabijanZulj/blame.nvim',
+    opts = {
+      date_format = '%Y-%m-%d',
+      merge_consecutive = true,
+    },
+  },
+
   { -- Adrien: show buffers in a tab line at top
     'akinsho/bufferline.nvim',
     dependencies = 'nvim-tree/nvim-web-devicons',
