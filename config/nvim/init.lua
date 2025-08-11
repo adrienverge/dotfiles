@@ -92,8 +92,11 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
   command = 'silent! normal! g`"zv',
 })
 
--- Adrien: enable folds (based on indentation)
-vim.opt.foldmethod = 'indent'
+-- Adrien: enable folds based on Treesitter syntax parsing
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldnestmax = 2
+vim.opt.foldtext = ''  -- Adrien: keep syntax highlighting on fold lines
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
