@@ -85,11 +85,14 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 })
 
 -- Adrien: Return cursor to where it was last time closing the file
-vim.api.nvim_create_autocmd('BufWinEnter', {
+vim.api.nvim_create_autocmd('BufReadPost', {
   desc = 'Return cursor to where it was last time closing the file',
-  group = vim.api.nvim_create_augroup('return-cursor-to-last-position', { clear = true }),
-  pattern = '*',
-  command = 'silent! normal! g`"zv',
+  group = vim.api.nvim_create_augroup('auto-last-position', { clear = true }),
+  callback = function(args)
+    local position = vim.api.nvim_buf_get_mark(args.buf, [["]])
+    local winid = vim.fn.bufwinid(args.buf)
+    pcall(vim.api.nvim_win_set_cursor, winid, position)
+  end,
 })
 
 -- Adrien: enable folds based on Treesitter syntax parsing
