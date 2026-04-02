@@ -100,6 +100,33 @@ vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldnestmax = 2
 vim.opt.foldtext = ''  -- Adrien: keep syntax highlighting on fold lines
+-- Adrien: the custom folding that I like, overriding nvim-treesitter ones:
+-- ~/.local/share/nvim/lazy/nvim-treesitter/queries/…/folds.scm
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = '*.lua',
+  callback = function()
+    require('vim.treesitter.query').set('lua', 'folds', [[
+      [ (function_definition) (function_declaration) (arguments) ] @fold
+    ]])
+  end,
+})
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = '*.sh',
+  callback = function()
+    require('vim.treesitter.query').set('bash', 'folds', [[
+      [ (function_definition) ] @fold
+    ]])
+  end,
+})
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = '*.py',
+  callback = function()
+    require('vim.treesitter.query').set('python', 'folds', [[
+      [ (function_definition) (class_definition) ] @fold
+      [ (import_statement) (import_from_statement) ]+ @fold
+    ]])
+  end,
+})
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
